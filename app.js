@@ -9,7 +9,7 @@ const indexRouter = require('./app_server/routes/index');
 const usersRouter = require('./app_server/routes/users');
 const travelRouter = require('./app_server/routes/travel');
 const roomsRouter = require('./app_server/routes/rooms');
-const mealsRouter = require('/app_server/routes/meals');
+const mealsRouter = require('./app_server/routes/meals');
 const { hasSubscribers } = require('diagnostics_channel');
 
 const app = express();
