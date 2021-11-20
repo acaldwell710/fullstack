@@ -1,0 +1,61 @@
+//const mongoose = require('mongoose');
+//const host = process.env.DB_HOST || process.env.MONGODB_URI || '127.0.0.1'
+//const dbURI = 'mongodb://${host}/travlr';
+//const readLine = require('readline');
+
+//let dbURL = 'mongodb://127.0.0.1/travlr';
+//if (process.env.NODE_ENV === 'production') {
+//  dbURL = process.env.DB_HOST || process.env.MONGODB_URI;
+//}
+
+//avoid 'current Server Discovery and Monitoring engine is deprecated'
+//async function run() {
+//    mongoose.set('useUnifiedTopology', true);
+    //mongoose.set('useNewUrlParser', true);
+
+//}
+
+//const connect = () => {
+//  setTimeout(() => mongoose.createConnection(dbURL), 1000);
+  //{ useNewUrlParser: true, useCreateIndex: true }
+//}
+
+const mongoose = require('mongoose');
+const dbURI = 'mongodb://localhost/travlr';                  
+mongoose.createConnection(dbURI, {useNewUrlParser: true});           
+mongoose.connection.on('connected', () => {                 
+  console.log(`Mongoose connected to ${dbURI}`);            
+});                                                         
+mongoose.connection.on('error', err => {                    
+  console.log(`Mongoose connection error: ${err}`);         
+});                                                         
+mongoose.connection.on('disconnected', () => {              
+  console.log('Mongoose disconnected');                     
+});                                                         
+const gracefulShutdown = (msg, callback) => {               
+  mongoose.connection.close( () => {                        
+    console.log(`Mongoose disconnected through ${msg}`);    
+    callback();                                             
+  });                                                       
+};                                                          
+// For nodemon restarts                                     
+process.once('SIGUSR2', () => {                             
+  gracefulShutdown('nodemon restart', () => {               
+    process.kill(process.pid, 'SIGUSR2');                   
+  });                                                       
+});                                                         
+// For app termination                                      
+process.on('SIGINT', () => {                                
+  gracefulShutdown('app termination', () => {               
+    process.exit(0);                                        
+  });                                                       
+});                                                         
+// For Heroku app termination                               
+process.on('SIGTERM', () => {                               
+  gracefulShutdown('Heroku app shutdown', () => {           
+    process.exit(0);                                        
+  });                                                       
+});
+
+// bring in the Mongoose schema
+require('./travlr');
