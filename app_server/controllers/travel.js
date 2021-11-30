@@ -34,8 +34,7 @@ const travelList = (req, res) => {
     };
     
     console.info('>> travelController.travelList calling ' + requestOptions.url);
-
-
+ 
     request(
         requestOptions,
         (err,  { statusCode } , body) => {

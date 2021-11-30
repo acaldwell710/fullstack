@@ -15,7 +15,7 @@ const newsRouter = require('./app_server/routes/news');
 const aboutRouter = require('./app_server/routes/about');
 const contactRouter = require('./app_server/routes/contact');
 const apiRouter = require('./app_api/routes/index');
-const { hasSubscribers } = require('diagnostics_channel');
+//const { hasSubscribers } = require('diagnostics_channel');
 
 const app = express();
 
