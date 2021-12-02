@@ -5,7 +5,7 @@ const readLine = require('readline');
 
 //avoid 'current Server Discovery and Monitoring engine is deprecated'
 //async function run() {
-//mongoose.set('useUnifiedTopology', true);
+mongoose.set('useUnifiedTopology', true);
     //mongoose.set('useNewUrlParser', true);
 
 //}
@@ -16,13 +16,6 @@ const connect = () => {
     useCreateIndex: true
   }), 1000);
 }
-//}
-
-//let dbURI = 'mongodb://localhost/travlr';
-//if (process.env.NODE_ENV === 'production') {
-//  dbURI = process.env.MONGODB_URI;
-//}
-//mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', () => {
   console.log(`Mongoose connected to ${dbURI}`);
@@ -34,22 +27,16 @@ mongoose.connection.on('disconnected', () => {
   console.log('Mongoose disconnected');
 });
 
+if (process.platform === 'win32') {
+  const rl = readLine.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  rl.on('SIGINT', () => {
+    process.emit("SIGINT");
+  });
+}  
 
-
-
-
-//const mongoose = require('mongoose');
-//const dbURI = 'mongodb://localhost/travlr';                  
-//mongoose.createConnection(dbURI, {useNewUrlParser: true});           
-//mongoose.connection.on('connected', () => {                 
-//  console.log(`Mongoose connected to ${dbURI}`);            
-//});                                                         
-//mongoose.connection.on('error', err => {                    
-//  console.log(`Mongoose connection error: ${err}`);         
-//});                                                         
-//mongoose.connection.on('disconnected', () => {              
-//  console.log('Mongoose disconnected');                     
-//});                                                         
 const gracefulShutdown = (msg, callback) => {               
   mongoose.connection.close( () => {                        
     console.log(`Mongoose disconnected through ${msg}`);    
@@ -74,6 +61,8 @@ process.on('SIGTERM', () => {
     process.exit(0);                                        
   });                                                       
 });
+
+connect();
 
 // bring in the Mongoose schema
 require('./travlr');
