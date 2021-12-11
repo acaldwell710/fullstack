@@ -1,0 +1,9 @@
+<div class="container" *ngIf="!isLoggedIn()">
+  <br>
+  <h2>Please login to continue</h2>
+</div>
+<div class="container" *ngIf="isLoggedIn()">
+  <br>
+  <h2>Welcome!</h2>
+  <h4>Please select Trips or Log Out to Continue</h4>
+</div>
